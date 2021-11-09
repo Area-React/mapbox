@@ -1,7 +1,10 @@
-import { MapasPage } from "./pages/MapasPage"
+import { SocketProvider } from "./context/SocketContext";
+import { MapasPage } from "./pages/MapasPage";
 
 export const MapasApp = () => {
-    return (
-        <MapasPage/>
-    )
-}
+  return (
+    <SocketProvider>
+      <MapasPage />
+    </SocketProvider>
+  );
+};

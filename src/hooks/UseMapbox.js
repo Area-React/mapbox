@@ -22,12 +22,12 @@ export const UseMapbox = (puntoInicial) => {
   const movimientoMarcador = useRef(new Subject());
   const nuevoMarcador = useRef(new Subject());
 
-  const agregarMarcador = useCallback((ev) => {
+  const agregarMarcador = useCallback((ev, id) => {
     
-    const { lng, lat } = ev.lngLat;
+    const { lng, lat } = ev.lngLat || ev;
 
     const marker = new mapboxgl.Marker();
-    marker.id = v4();
+    marker.id = id ?? v4();
 
     marker
         .setLngLat([lng, lat])
@@ -50,6 +50,10 @@ export const UseMapbox = (puntoInicial) => {
         const { lng, lat } = target.getLngLat(); 
         movimientoMarcador.current.next({id, lng, lat});
     })
+  }, []);
+
+  const actualizarPosicion = useCallback(({id, lng, lat}) => {
+    marcadores.current[id].setLngLat([lng, lat]);
   }, []);
 
   useEffect(() => {
@@ -79,6 +83,7 @@ export const UseMapbox = (puntoInicial) => {
   }, [agregarMarcador]);
 
   return {
+    actualizarPosicion,
     agregarMarcador,
     coords,
     marcadores,
